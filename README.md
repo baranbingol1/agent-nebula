@@ -1,3 +1,3 @@
 # agent-nebula
 
-![agent-nebula-readme-image](/assets/aislopimage.jpg)
+![agent-nebula-readme-image](/assets/aislopimagecompressed.jpg)
