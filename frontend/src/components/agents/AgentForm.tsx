@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import AvatarPicker from "./AvatarPicker";
 import ModelSelect from "./ModelSelect";
+import Avatar from "../shared/Avatar";
 import type { Agent, AgentCreate } from "../../types";
 import { DEFAULT_PROVIDER, DEFAULT_MODEL, buildModelString } from "../../types";
 
@@ -15,7 +15,6 @@ export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps)
   const [name, setName] = useState(agent?.name ?? "");
   const [systemPrompt, setSystemPrompt] = useState(agent?.system_prompt ?? "");
   const [model, setModel] = useState(agent?.model ?? buildModelString(DEFAULT_PROVIDER.id, DEFAULT_MODEL));
-  const [avatarId, setAvatarId] = useState(agent?.avatar_id ?? "robot");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +23,6 @@ export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps)
       name: name.trim(),
       system_prompt: systemPrompt.trim(),
       model,
-      avatar_id: avatarId,
     });
   };
 
@@ -48,14 +46,17 @@ export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps)
             <label className="mb-1.5 block text-sm font-medium text-nebula-200">
               Name
             </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Philosopher Bot"
-              className="w-full rounded-lg border border-nebula-500/30 bg-nebula-700/50 px-3 py-2 text-sm text-star-white placeholder-nebula-400 outline-none focus:border-cosmic-purple focus:ring-1 focus:ring-cosmic-purple"
-              required
-            />
+            <div className="flex items-center gap-3">
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g., Philosopher Bot"
+                className="flex-1 rounded-lg border border-nebula-500/30 bg-nebula-700/50 px-3 py-2 text-sm text-star-white placeholder-nebula-400 outline-none focus:border-cosmic-purple focus:ring-1 focus:ring-cosmic-purple"
+                required
+              />
+              {name.trim() && <Avatar name={name.trim()} size="md" />}
+            </div>
           </div>
 
           <div>
@@ -77,13 +78,6 @@ export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps)
               Model
             </label>
             <ModelSelect value={model} onChange={setModel} />
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-nebula-200">
-              Avatar
-            </label>
-            <AvatarPicker value={avatarId} onChange={setAvatarId} />
           </div>
 
           <div className="flex justify-end gap-3 pt-2">

@@ -27,7 +27,6 @@ async def get_messages(
                 turn_number=m.turn_number,
                 created_at=m.created_at,
                 agent_name=m.agent.name if m.agent else None,
-                agent_avatar_id=m.agent.avatar_id if m.agent else None,
             )
             for m in messages
         ],

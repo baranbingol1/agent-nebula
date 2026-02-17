@@ -11,6 +11,5 @@ class MessageResponse(BaseModel):
     turn_number: int
     created_at: datetime
     agent_name: str | None = None
-    agent_avatar_id: str | None = None
 
     model_config = {"from_attributes": True}

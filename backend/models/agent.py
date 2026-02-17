@@ -12,7 +12,6 @@ class Agent(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     system_prompt: Mapped[str] = mapped_column(Text, nullable=False)
     model: Mapped[str] = mapped_column(String(200), nullable=False)
-    avatar_id: Mapped[str] = mapped_column(String(50), nullable=False, default="robot")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )

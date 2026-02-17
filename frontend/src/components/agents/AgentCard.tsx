@@ -13,7 +13,7 @@ export default function AgentCard({ agent, onEdit, onDelete }: AgentCardProps) {
   return (
     <div className="bg-cosmic-card group rounded-xl p-4 transition-all hover:border-cosmic-purple/30">
       <div className="flex items-start gap-3">
-        <Avatar avatarId={agent.avatar_id} size="lg" />
+        <Avatar name={agent.name} size="lg" />
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-star-white truncate">
             {agent.name}

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Agent Nebula is a multi-agent conversation simulator. Users create AI agents (with name, system prompt, model, avatar), assign them to rooms, and watch them converse in round-robin order via WebSocket. Users can pause, resume, stop, and inject messages into running simulations.
+Agent Nebula is a multi-agent conversation simulator. Users create AI agents (with name, system prompt, model), assign them to rooms, and watch them converse in round-robin order via WebSocket. Users can pause, resume, stop, and inject messages into running simulations.
 
 ## Development Commands
 
@@ -36,7 +36,7 @@ cd frontend && pnpm build        # Production build
 - Room agent reordering uses temporary high turn_order values to avoid unique constraint violations
 - The `ws_manager` singleton (in simulation_engine.py) is shared between the simulation loop and the WebSocket router
 - Frontend API client is at `frontend/src/api/client.ts` — all API calls go through `apiFetch()` with base URL `http://localhost:8484`
-- Avatar system: 28 predefined emoji avatars in `backend/avatars.py` and `frontend/src/avatars/index.ts` (must stay in sync)
+- Avatar system: Deterministic identicons generated frontend-only from agent names (`frontend/src/lib/identicon.ts`). No backend avatar storage needed.
 
 ## Environment
 

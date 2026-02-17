@@ -60,7 +60,7 @@ export default function RoomCard({ room, onEdit, onDelete }: RoomCardProps) {
         </div>
         <div className="flex -space-x-2">
           {room.agents.slice(0, 4).map((ra) => (
-            <Avatar key={ra.agent_id} avatarId={ra.agent.avatar_id} size="sm" />
+            <Avatar key={ra.agent_id} name={ra.agent.name} size="sm" />
           ))}
           {room.agents.length > 4 && (
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-nebula-600 border border-nebula-500/30 text-xs text-nebula-200">

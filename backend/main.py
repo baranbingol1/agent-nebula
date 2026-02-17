@@ -9,7 +9,6 @@ from routers import (
     rooms_router,
     simulation_router,
     messages_router,
-    avatars_router,
     ws_router,
 )
 
@@ -34,7 +33,6 @@ app.include_router(agents_router)
 app.include_router(rooms_router)
 app.include_router(simulation_router)
 app.include_router(messages_router)
-app.include_router(avatars_router)
 app.include_router(ws_router)
 
 

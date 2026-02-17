@@ -8,12 +8,11 @@ interface MessageBubbleProps {
 export default function MessageBubble({ message }: MessageBubbleProps) {
   const isUser = !message.agent_id;
   const name = message.agent_name ?? "User";
-  const avatarId = message.agent_avatar_id ?? "star";
 
   return (
     <div className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}>
       <div className="flex-shrink-0 mt-1">
-        <Avatar avatarId={avatarId} size="sm" />
+        <Avatar name={name} size="sm" />
       </div>
       <div className={`max-w-[75%] min-w-0 ${isUser ? "items-end" : ""}`}>
         <div className="flex items-center gap-2 mb-1">

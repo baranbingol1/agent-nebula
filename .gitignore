@@ -79,6 +79,9 @@ ENV/
 # Node
 node_modules/
 
+# automated quality checks
+agent-nebula_*
+
 # Tool configs
 .agent/
 .agents/

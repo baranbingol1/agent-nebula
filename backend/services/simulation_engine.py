@@ -106,7 +106,6 @@ class SimulationRunner:
                                     "turn_number": msg.turn_number,
                                     "created_at": msg.created_at.isoformat(),
                                     "agent_name": "User",
-                                    "agent_avatar_id": None,
                                 },
                             })
                         except asyncio.QueueEmpty:
@@ -157,7 +156,6 @@ class SimulationRunner:
                             "turn_number": msg.turn_number,
                             "created_at": msg.created_at.isoformat(),
                             "agent_name": agent_model.name,
-                            "agent_avatar_id": agent_model.avatar_id,
                         },
                     })
 
@@ -186,7 +184,8 @@ class SimulationRunner:
                     await db.commit()
             await ws_manager.broadcast(self.room_id, {
                 "type": "status", "status": "stopped",
-                "current_turn_index": 0, "max_turns": 0,
+                "current_turn_index": room.current_turn_index if room else 0,
+                "max_turns": room.max_turns if room else 0,
             })
         except Exception as e:
             logger.exception(f"Simulation error for room {self.room_id}: {e}")

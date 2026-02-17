@@ -47,4 +47,4 @@ All TypeScript interfaces and the `MODELS` constant (available LLM models) live 
 
 ### Avatars
 
-`avatars/index.ts` mirrors `backend/avatars.py` — 28 emoji avatars. Both files must stay in sync.
+Deterministic 5x5 symmetric identicons generated from agent names via `lib/identicon.ts`. No backend storage or manual selection — each agent name produces a unique visual identity automatically.

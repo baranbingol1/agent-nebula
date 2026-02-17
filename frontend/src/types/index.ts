@@ -3,7 +3,6 @@ export interface Agent {
   name: string;
   system_prompt: string;
   model: string;
-  avatar_id: string;
   created_at: string;
 }
 
@@ -11,14 +10,12 @@ export interface AgentCreate {
   name: string;
   system_prompt: string;
   model: string;
-  avatar_id: string;
 }
 
 export interface AgentUpdate {
   name?: string;
   system_prompt?: string;
   model?: string;
-  avatar_id?: string;
 }
 
 export interface RoomAgentInfo {
@@ -59,7 +56,6 @@ export interface Message {
   turn_number: number;
   created_at: string;
   agent_name: string | null;
-  agent_avatar_id: string | null;
 }
 
 export interface SimulationStatus {
@@ -67,12 +63,6 @@ export interface SimulationStatus {
   status: string;
   current_turn_index: number;
   max_turns: number;
-}
-
-export interface AvatarDef {
-  id: string;
-  emoji: string;
-  label: string;
 }
 
 export interface WSMessage {

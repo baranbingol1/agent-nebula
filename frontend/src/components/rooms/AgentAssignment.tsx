@@ -58,7 +58,7 @@ export default function AgentAssignment({ room }: AgentAssignmentProps) {
               <span className="text-xs font-mono text-nebula-400 w-4">
                 {i + 1}
               </span>
-              <Avatar avatarId={ra.agent.avatar_id} size="sm" />
+              <Avatar name={ra.agent.name} size="sm" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-star-white truncate">
                   {ra.agent.name}
@@ -89,7 +89,7 @@ export default function AgentAssignment({ room }: AgentAssignmentProps) {
                 key={agent.id}
                 className="flex items-center gap-3 rounded-lg bg-nebula-800/50 border border-nebula-600/20 px-3 py-2.5"
               >
-                <Avatar avatarId={agent.avatar_id} size="sm" />
+                <Avatar name={agent.name} size="sm" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-nebula-200 truncate">
                     {agent.name}
