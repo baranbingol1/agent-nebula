@@ -72,3 +72,17 @@ ENV/
 
 # ruff
 .ruff_cache/
+
+# Database
+*.db
+
+# Node
+node_modules/
+
+# Tool configs
+.agent/
+.agents/
+.cursor/
+.factory/
+.claude/
+claude-codebase-quality/
