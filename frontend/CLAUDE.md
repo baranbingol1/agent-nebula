@@ -43,7 +43,7 @@ Dark space/nebula theme. Custom colors defined as CSS variables in `index.css` u
 
 ### Types
 
-All TypeScript interfaces and the `MODELS` constant (available LLM models) live in `types/index.ts`. The `MODELS` array must stay in sync with what the backend supports.
+All TypeScript interfaces and the `PROVIDERS` constant (available LLM providers) live in `types/index.ts`. The `PROVIDERS` array must stay in sync with what the backend supports.
 
 ### Avatars
 

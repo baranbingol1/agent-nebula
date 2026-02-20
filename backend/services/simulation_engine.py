@@ -37,7 +37,8 @@ class ConnectionManager:
         for ws in self.rooms[room_id]:
             try:
                 await ws.send_text(json.dumps(data, default=str))
-            except Exception:
+            except Exception as e:
+                logger.warning(f"Failed to broadcast to {room_id}: {e}")
                 dead.append(ws)
         for ws in dead:
             self.disconnect(room_id, ws)

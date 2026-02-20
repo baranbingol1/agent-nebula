@@ -19,6 +19,7 @@ export default function ConversationView({ room }: ConversationViewProps) {
   const [typing, setTyping] = useState<{ agent_id: string; agent_name: string } | null>(null);
   const [currentTurn, setCurrentTurn] = useState(room.current_turn_index);
   const [maxTurns, setMaxTurns] = useState(room.max_turns);
+  const [error, setError] = useState<string | null>(null);
 
   // WebSocket for live updates
   useWebSocket(room.id, {
@@ -48,41 +49,51 @@ export default function ConversationView({ room }: ConversationViewProps) {
 
   const handleStart = useCallback(async () => {
     try {
+      setError(null);
       await simulationApi.start(room.id);
     } catch (e: any) {
       console.error("Failed to start:", e);
+      setError(e.message || "Failed to start simulation");
     }
   }, [room.id]);
 
   const handlePause = useCallback(async () => {
     try {
+      setError(null);
       await simulationApi.pause(room.id);
     } catch (e: any) {
       console.error("Failed to pause:", e);
+      setError(e.message || "Failed to pause simulation");
     }
   }, [room.id]);
 
   const handleResume = useCallback(async () => {
     try {
+      setError(null);
       await simulationApi.resume(room.id);
     } catch (e: any) {
       console.error("Failed to resume:", e);
+      setError(e.message || "Failed to resume simulation");
     }
   }, [room.id]);
 
   const handleStop = useCallback(async () => {
     try {
+      setError(null);
       await simulationApi.stop(room.id);
     } catch (e: any) {
       console.error("Failed to stop:", e);
+      setError(e.message || "Failed to stop simulation");
     }
   }, [room.id]);
 
   const handleInject = useCallback(async (content: string) => {
     try {
+      setError(null);
       await simulationApi.inject(room.id, content);
     } catch (e: any) {
       console.error("Failed to inject:", e);
+      setError(e.message || "Failed to inject message");
     }
   }, [room.id]);
 
@@ -90,6 +101,12 @@ export default function ConversationView({ room }: ConversationViewProps) {
 
   return (
     <div className="flex flex-col h-full bg-nebula-900/50 rounded-xl border border-nebula-600/20 overflow-hidden">
+      {error && (
+        <div className="bg-red-500/20 border-b border-red-500/50 p-3 text-red-200 text-sm flex justify-between items-center">
+          <span>{error}</span>
+          <button onClick={() => setError(null)} className="hover:text-white">&times;</button>
+        </div>
+      )}
       <ControlBar
         status={status}
         currentTurn={currentTurn}
