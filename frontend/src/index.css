@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --color-nebula-900: #0a0a1a;
-  --color-nebula-800: #12122a;
-  --color-nebula-700: #1a1a3e;
-  --color-nebula-600: #252552;
-  --color-nebula-500: #363680;
-  --color-nebula-400: #5555aa;
-  --color-nebula-300: #7777cc;
-  --color-nebula-200: #aaaaee;
-  --color-nebula-100: #ccccff;
-  --color-cosmic-purple: #8b5cf6;
-  --color-cosmic-blue: #3b82f6;
-  --color-cosmic-pink: #ec4899;
-  --color-cosmic-cyan: #06b6d4;
-  --color-glow-purple: #a78bfa;
-  --color-glow-blue: #60a5fa;
-  --color-star-white: #f0f0ff;
-  --color-void-black: #050510;
+  --color-nebula-900: #130d1e;
+  --color-nebula-800: #1e1530;
+  --color-nebula-700: #2b1e3e;
+  --color-nebula-600: #382b52;
+  --color-nebula-500: #4a4e8f;
+  --color-nebula-400: #7068a0;
+  --color-nebula-300: #a490c2;
+  --color-nebula-200: #c5b8d8;
+  --color-nebula-100: #ddd6ee;
+  --color-cosmic-purple: #a490c2;
+  --color-cosmic-blue: #4a4e8f;
+  --color-cosmic-pink: #c49ab8;
+  --color-cosmic-cyan: #8b9fd4;
+  --color-glow-purple: #b8a4d0;
+  --color-glow-blue: #7080b0;
+  --color-star-white: #e6e6fa;
+  --color-void-black: #0a0612;
 }
 
 body {
@@ -40,13 +40,13 @@ body {
 
 /* Glow effect utility */
 .glow-purple {
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3), 0 0 30px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 15px rgba(164, 144, 194, 0.3), 0 0 30px rgba(164, 144, 194, 0.1);
 }
 .glow-blue {
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3), 0 0 30px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 15px rgba(74, 78, 143, 0.3), 0 0 30px rgba(74, 78, 143, 0.1);
 }
 .glow-text {
-  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  text-shadow: 0 0 10px rgba(164, 144, 194, 0.5);
 }
 
 /* Cosmic gradient backgrounds */
@@ -54,8 +54,8 @@ body {
   background: linear-gradient(135deg, var(--color-nebula-900) 0%, var(--color-nebula-800) 50%, var(--color-nebula-700) 100%);
 }
 .bg-cosmic-card {
-  background: linear-gradient(145deg, rgba(26, 26, 62, 0.8) 0%, rgba(18, 18, 42, 0.9) 100%);
-  border: 1px solid rgba(85, 85, 170, 0.2);
+  background: linear-gradient(145deg, rgba(43, 30, 62, 0.8) 0%, rgba(30, 21, 48, 0.9) 100%);
+  border: 1px solid rgba(74, 78, 143, 0.2);
 }
 
 /* Animation for typing indicator */

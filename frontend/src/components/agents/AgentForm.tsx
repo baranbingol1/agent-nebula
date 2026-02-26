@@ -4,6 +4,7 @@ import ModelSelect from "./ModelSelect";
 import Avatar from "../shared/Avatar";
 import type { Agent, AgentCreate } from "../../types";
 import { DEFAULT_PROVIDER, DEFAULT_MODEL, buildModelString } from "../../types";
+import { PERSONA_PRESETS } from "../../types/personas";
 
 interface AgentFormProps {
   agent?: Agent;
@@ -15,6 +16,20 @@ export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps)
   const [name, setName] = useState(agent?.name ?? "");
   const [systemPrompt, setSystemPrompt] = useState(agent?.system_prompt ?? "");
   const [model, setModel] = useState(agent?.model ?? buildModelString(DEFAULT_PROVIDER.id, DEFAULT_MODEL));
+  const [selectedPresetId, setSelectedPresetId] = useState("");
+
+  const selectedPreset = PERSONA_PRESETS.find((preset) => preset.id === selectedPresetId);
+
+  const applyPreset = (presetId: string) => {
+    setSelectedPresetId(presetId);
+    const preset = PERSONA_PRESETS.find((item) => item.id === presetId);
+    if (!preset) return;
+    setSystemPrompt(preset.systemPrompt);
+    setModel(preset.modelPairing.quality);
+    if (!name.trim()) {
+      setName(preset.defaultAgentName);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +57,33 @@ export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps)
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-nebula-200">
+              Persona Template
+            </label>
+            <select
+              value={selectedPresetId}
+              onChange={(e) => applyPreset(e.target.value)}
+              className="w-full rounded-lg border border-nebula-500/30 bg-nebula-700/50 px-3 py-2 text-sm text-star-white outline-none focus:border-cosmic-purple focus:ring-1 focus:ring-cosmic-purple"
+            >
+              <option value="">Custom (no preset)</option>
+              {PERSONA_PRESETS.map((preset) => (
+                <option key={preset.id} value={preset.id}>
+                  {preset.name} · {preset.category}
+                </option>
+              ))}
+            </select>
+            {selectedPreset && (
+              <div className="mt-2 rounded-lg border border-nebula-500/30 bg-nebula-700/30 p-3">
+                <p className="text-sm text-nebula-100">{selectedPreset.summary}</p>
+                <p className="mt-1 text-xs text-nebula-300">Best for: {selectedPreset.bestFor}</p>
+                <p className="mt-1 text-xs text-nebula-300">
+                  Recommended models: {selectedPreset.modelPairing.quality} (quality) · {selectedPreset.modelPairing.fast} (fast)
+                </p>
+              </div>
+            )}
+          </div>
+
           <div>
             <label className="mb-1.5 block text-sm font-medium text-nebula-200">
               Name

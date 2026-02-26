@@ -87,14 +87,14 @@ export const PROVIDERS: Provider[] = [
   {
     id: "openrouter",
     label: "OpenRouter",
-    placeholder: "anthropic/claude-sonnet-4.5",
-    examples: "anthropic/claude-sonnet-4.5 · openai/gpt-4.1 · google/gemini-2.5-pro · deepseek/deepseek-r1",
+    placeholder: "openai/gpt-5.2",
+    examples: "openai/gpt-5.2 · google/gemini-3.1-pro-preview · deepseek/deepseek-r1 · x-ai/grok-4",
   },
   {
     id: "openai",
     label: "OpenAI",
-    placeholder: "gpt-4.1",
-    examples: "gpt-4.1 · gpt-4.1-mini · o3 · o4-mini",
+    placeholder: "gpt-5.2",
+    examples: "gpt-5.2 · gpt-5-mini · gpt-5-pro · gpt-5.2-pro",
   },
   {
     id: "xai",
@@ -105,7 +105,7 @@ export const PROVIDERS: Provider[] = [
 ];
 
 export const DEFAULT_PROVIDER = PROVIDERS[0];
-export const DEFAULT_MODEL = "openai/gpt-4.1";
+export const DEFAULT_MODEL = "openai/gpt-5.2";
 
 export function buildModelString(providerId: string, model: string): string {
   return `litellm/${providerId}/${model}`;
