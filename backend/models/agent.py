@@ -1,7 +1,9 @@
 import uuid
-from datetime import datetime, timezone
-from sqlalchemy import String, Text, DateTime
+from datetime import UTC, datetime
+
+from sqlalchemy import DateTime, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import Base
 
 
@@ -13,7 +15,7 @@ class Agent(Base):
     system_prompt: Mapped[str] = mapped_column(Text, nullable=False)
     model: Mapped[str] = mapped_column(String(200), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )
 
     room_assignments: Mapped[list["RoomAgent"]] = relationship(  # noqa: F821

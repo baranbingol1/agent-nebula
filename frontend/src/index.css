@@ -58,6 +58,15 @@ body {
   border: 1px solid rgba(74, 78, 143, 0.2);
 }
 
+/* Toast slide-in animation */
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in {
+  animation: slide-in 0.25s ease-out;
+}
+
 /* Animation for typing indicator */
 @keyframes bounce-dot {
   0%, 80%, 100% { transform: translateY(0); }
@@ -68,6 +77,65 @@ body {
 }
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Markdown in chat bubbles */
+.prose-bubble {
+  line-height: 1.6;
+}
+.prose-bubble p { margin: 0.25em 0; }
+.prose-bubble p:first-child { margin-top: 0; }
+.prose-bubble p:last-child { margin-bottom: 0; }
+.prose-bubble strong { font-weight: 600; color: var(--color-star-white); }
+.prose-bubble em { font-style: italic; }
+.prose-bubble code {
+  background: rgba(0,0,0,0.3);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+}
+.prose-bubble pre {
+  background: rgba(0,0,0,0.35);
+  border-radius: 8px;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  overflow-x: auto;
+}
+.prose-bubble pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85em;
+}
+.prose-bubble ul, .prose-bubble ol {
+  padding-left: 1.5em;
+  margin: 0.35em 0;
+}
+.prose-bubble ul { list-style: disc; }
+.prose-bubble ol { list-style: decimal; }
+.prose-bubble li { margin: 0.15em 0; }
+.prose-bubble h1, .prose-bubble h2, .prose-bubble h3 {
+  font-weight: 600;
+  color: var(--color-star-white);
+  margin: 0.5em 0 0.25em;
+}
+.prose-bubble h1 { font-size: 1.2em; }
+.prose-bubble h2 { font-size: 1.1em; }
+.prose-bubble h3 { font-size: 1em; }
+.prose-bubble blockquote {
+  border-left: 3px solid var(--color-nebula-500);
+  padding-left: 0.75em;
+  margin: 0.5em 0;
+  color: var(--color-nebula-300);
+}
+.prose-bubble a {
+  color: var(--color-cosmic-cyan);
+  text-decoration: underline;
+}
+.prose-bubble hr {
+  border: none;
+  border-top: 1px solid var(--color-nebula-600);
+  margin: 0.5em 0;
+}
 
 /* Stars background effect */
 .stars-bg {

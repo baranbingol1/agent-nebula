@@ -1,8 +1,8 @@
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
+
 from models.message import Message
-from models.agent import Agent
 
 
 class MessageService:

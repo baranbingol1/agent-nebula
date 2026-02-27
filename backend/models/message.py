@@ -1,7 +1,9 @@
 import uuid
-from datetime import datetime, timezone
-from sqlalchemy import String, Text, Integer, DateTime, ForeignKey
+from datetime import UTC, datetime
+
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import Base
 
 
@@ -15,7 +17,7 @@ class Message(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     turn_number: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )
 
     room: Mapped["Room"] = relationship("Room", back_populates="messages")  # noqa: F821

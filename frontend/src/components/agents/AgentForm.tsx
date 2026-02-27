@@ -10,9 +10,10 @@ interface AgentFormProps {
   agent?: Agent;
   onSubmit: (data: AgentCreate) => void;
   onCancel: () => void;
+  isPending?: boolean;
 }
 
-export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps) {
+export default function AgentForm({ agent, onSubmit, onCancel, isPending }: AgentFormProps) {
   const [name, setName] = useState(agent?.name ?? "");
   const [systemPrompt, setSystemPrompt] = useState(agent?.system_prompt ?? "");
   const [model, setModel] = useState(agent?.model ?? buildModelString(DEFAULT_PROVIDER.id, DEFAULT_MODEL));
@@ -132,9 +133,10 @@ export default function AgentForm({ agent, onSubmit, onCancel }: AgentFormProps)
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-cosmic-purple px-4 py-2 text-sm font-medium text-white hover:bg-cosmic-purple/80 transition-colors"
+              disabled={isPending}
+              className="rounded-lg bg-cosmic-purple px-4 py-2 text-sm font-medium text-white hover:bg-cosmic-purple/80 transition-colors disabled:opacity-50"
             >
-              {agent ? "Save Changes" : "Create Agent"}
+              {isPending ? "Saving..." : agent ? "Save Changes" : "Create Agent"}
             </button>
           </div>
         </form>

@@ -1,3 +1,4 @@
+import Markdown from "react-markdown";
 import Avatar from "../shared/Avatar";
 import type { Message } from "../../types";
 
@@ -30,7 +31,9 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
               : "bg-nebula-700/50 border border-nebula-500/20 text-nebula-100"
           }`}
         >
-          <p className="whitespace-pre-wrap break-words">{message.content}</p>
+          <div className="prose-bubble break-words">
+            <Markdown>{message.content}</Markdown>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8484";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8484";
 
 export async function apiFetch<T>(
   path: string,
@@ -20,5 +20,6 @@ export async function apiFetch<T>(
 }
 
 export function wsUrl(roomId: string): string {
-  return `ws://localhost:8484/ws/${roomId}`;
+  const wsBase = import.meta.env.VITE_WS_BASE || API_BASE.replace(/^http/, "ws");
+  return `${wsBase}/ws/${roomId}`;
 }

@@ -1,6 +1,5 @@
 """Integration tests for the simulation API endpoints."""
 
-import pytest
 
 
 async def _create_room_with_agent(client):

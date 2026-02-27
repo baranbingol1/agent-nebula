@@ -1,10 +1,8 @@
 """Unit tests for AgentService CRUD operations."""
 
-import pytest
 
-from services.agent_service import AgentService
 from schemas.agent import AgentCreate, AgentUpdate
-from models.agent import Agent
+from services.agent_service import AgentService
 
 
 class TestAgentService:
@@ -46,8 +44,8 @@ class TestAgentService:
 
     async def test_list_agents_order(self, db_session):
         service = AgentService(db_session)
-        a1 = await service.create_agent(AgentCreate(name="First", system_prompt="p", model="m"))
-        a2 = await service.create_agent(AgentCreate(name="Second", system_prompt="p", model="m"))
+        await service.create_agent(AgentCreate(name="First", system_prompt="p", model="m"))
+        await service.create_agent(AgentCreate(name="Second", system_prompt="p", model="m"))
 
         agents = await service.list_agents()
         assert agents[0].created_at >= agents[1].created_at

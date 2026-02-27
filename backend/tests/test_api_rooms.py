@@ -1,6 +1,5 @@
 """Integration tests for the rooms API endpoints."""
 
-import pytest
 
 
 async def _create_agent(client, name="Bot"):

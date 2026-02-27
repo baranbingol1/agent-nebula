@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,9 +7,9 @@ from config import settings
 from database import init_db
 from routers import (
     agents_router,
+    messages_router,
     rooms_router,
     simulation_router,
-    messages_router,
     ws_router,
 )
 

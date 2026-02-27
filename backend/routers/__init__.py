@@ -1,7 +1,7 @@
 from routers.agents import router as agents_router
+from routers.messages import router as messages_router
 from routers.rooms import router as rooms_router
 from routers.simulation import router as simulation_router
-from routers.messages import router as messages_router
 from routers.ws import router as ws_router
 
 __all__ = [

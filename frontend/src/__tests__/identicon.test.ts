@@ -47,7 +47,6 @@ describe("generateIdenticon", () => {
 
   it("produces symmetric pattern (5x5 grid mirrored)", () => {
     const svg = generateIdenticon("SymTest", 50);
-    const cellSize = 50 / 5;
     const rects = svg.match(/<rect[^/]*\/>/g) || [];
     // Should have at least background rect + some foreground
     expect(rects.length).toBeGreaterThan(1);

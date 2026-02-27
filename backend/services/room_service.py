@@ -1,9 +1,10 @@
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
+
+from models.agent import Agent
 from models.room import Room
 from models.room_agent import RoomAgent
-from models.agent import Agent
 from schemas.room import RoomCreate, RoomUpdate
 
 

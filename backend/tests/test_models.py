@@ -1,12 +1,11 @@
 """Unit tests for SQLAlchemy models - creation, defaults, relationships."""
 
-import pytest
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from models.agent import Agent
+from models.message import Message
 from models.room import Room
 from models.room_agent import RoomAgent
-from models.message import Message
 
 
 class TestAgentModel:
@@ -28,7 +27,7 @@ class TestAgentModel:
         assert a1.id != a2.id
 
     async def test_agent_created_at_auto(self, db_session):
-        before = datetime.now(timezone.utc)
+        before = datetime.now(UTC)
         agent = Agent(name="Bot", system_prompt="p", model="m")
         db_session.add(agent)
         await db_session.flush()

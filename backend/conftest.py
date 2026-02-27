@@ -4,14 +4,13 @@ from pathlib import Path
 
 import pytest
 import pytest_asyncio
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 sys.path.insert(0, str(Path(__file__).parent))
 
 from database import Base, get_db
 from main import app
-
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 

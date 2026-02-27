@@ -1,12 +1,11 @@
 """Unit tests for MessageService operations."""
 
-import pytest
 
-from services.message_service import MessageService
-from services.agent_service import AgentService
-from services.room_service import RoomService
 from schemas.agent import AgentCreate
 from schemas.room import RoomCreate
+from services.agent_service import AgentService
+from services.message_service import MessageService
+from services.room_service import RoomService
 
 
 async def _setup_room_and_agent(db_session):

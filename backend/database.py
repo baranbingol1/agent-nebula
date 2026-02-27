@@ -1,4 +1,4 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
 from config import settings
@@ -27,5 +27,5 @@ async def get_db() -> AsyncSession:
 
 async def init_db():
     async with engine.begin() as conn:
-        from models import agent, room, room_agent, message  # noqa: F401
+        from models import agent, message, room, room_agent  # noqa: F401
         await conn.run_sync(Base.metadata.create_all)

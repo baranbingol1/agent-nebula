@@ -1,9 +1,6 @@
 """Tests for database configuration and initialization."""
 
-import pytest
 from sqlalchemy import text
-
-from database import Base
 
 
 class TestDatabase:

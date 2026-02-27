@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Bot } from "lucide-react";
 import { agentsApi } from "../../api/agents";
+import { useToastStore } from "../../stores/toastStore";
 import AgentCard from "./AgentCard";
 import AgentForm from "./AgentForm";
 import EmptyState from "../shared/EmptyState";
@@ -10,6 +11,7 @@ import type { Agent, AgentCreate } from "../../types";
 
 export default function AgentList() {
   const queryClient = useQueryClient();
+  const addToast = useToastStore((s) => s.addToast);
   const [showForm, setShowForm] = useState(false);
   const [editAgent, setEditAgent] = useState<Agent | null>(null);
   const [deleteAgent, setDeleteAgent] = useState<Agent | null>(null);
@@ -24,7 +26,9 @@ export default function AgentList() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["agents"] });
       setShowForm(false);
+      addToast("success", "Agent created");
     },
+    onError: () => addToast("error", "Failed to create agent"),
   });
 
   const updateMutation = useMutation({
@@ -33,12 +37,18 @@ export default function AgentList() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["agents"] });
       setEditAgent(null);
+      addToast("success", "Agent updated");
     },
+    onError: () => addToast("error", "Failed to update agent"),
   });
 
   const deleteMutation = useMutation({
     mutationFn: agentsApi.delete,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["agents"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["agents"] });
+      addToast("success", "Agent deleted");
+    },
+    onError: () => addToast("error", "Failed to delete agent"),
   });
 
   if (isLoading) {
@@ -98,6 +108,7 @@ export default function AgentList() {
         <AgentForm
           onSubmit={(data) => createMutation.mutate(data)}
           onCancel={() => setShowForm(false)}
+          isPending={createMutation.isPending}
         />
       )}
 
@@ -108,6 +119,7 @@ export default function AgentList() {
             updateMutation.mutate({ id: editAgent.id, data })
           }
           onCancel={() => setEditAgent(null)}
+          isPending={updateMutation.isPending}
         />
       )}
 

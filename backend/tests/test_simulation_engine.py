@@ -1,8 +1,6 @@
 """Unit tests for ConnectionManager and SimulationManager."""
 
-import asyncio
 import json
-import pytest
 
 from services.simulation_engine import ConnectionManager, SimulationManager
 

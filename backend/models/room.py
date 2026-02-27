@@ -1,7 +1,9 @@
 import uuid
-from datetime import datetime, timezone
-from sqlalchemy import String, Text, Integer, DateTime
+from datetime import UTC, datetime
+
+from sqlalchemy import DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import Base
 
 
@@ -15,7 +17,7 @@ class Room(Base):
     current_turn_index: Mapped[int] = mapped_column(Integer, default=0)
     max_turns: Mapped[int] = mapped_column(Integer, default=20)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )
 
     agents: Mapped[list["RoomAgent"]] = relationship(  # noqa: F821

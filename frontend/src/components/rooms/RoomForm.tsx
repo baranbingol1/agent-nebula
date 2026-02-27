@@ -6,9 +6,10 @@ interface RoomFormProps {
   room?: Room;
   onSubmit: (data: RoomCreate) => void;
   onCancel: () => void;
+  isPending?: boolean;
 }
 
-export default function RoomForm({ room, onSubmit, onCancel }: RoomFormProps) {
+export default function RoomForm({ room, onSubmit, onCancel, isPending }: RoomFormProps) {
   const [name, setName] = useState(room?.name ?? "");
   const [description, setDescription] = useState(room?.description ?? "");
   const [maxTurns, setMaxTurns] = useState(room?.max_turns ?? 20);
@@ -93,9 +94,10 @@ export default function RoomForm({ room, onSubmit, onCancel }: RoomFormProps) {
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-cosmic-purple px-4 py-2 text-sm font-medium text-white hover:bg-cosmic-purple/80 transition-colors"
+              disabled={isPending}
+              className="rounded-lg bg-cosmic-purple px-4 py-2 text-sm font-medium text-white hover:bg-cosmic-purple/80 transition-colors disabled:opacity-50"
             >
-              {room ? "Save Changes" : "Create Room"}
+              {isPending ? "Saving..." : room ? "Save Changes" : "Create Room"}
             </button>
           </div>
         </form>

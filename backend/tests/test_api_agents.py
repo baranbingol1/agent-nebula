@@ -1,6 +1,5 @@
 """Integration tests for the agents API endpoints."""
 
-import pytest
 
 
 class TestAgentsAPI:

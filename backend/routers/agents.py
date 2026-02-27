@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from database import get_db
-from schemas.agent import AgentCreate, AgentUpdate, AgentResponse
+from schemas.agent import AgentCreate, AgentResponse, AgentUpdate
 from services.agent_service import AgentService
 
 router = APIRouter(prefix="/api/agents", tags=["agents"])

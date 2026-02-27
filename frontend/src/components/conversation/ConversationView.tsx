@@ -28,10 +28,11 @@ export default function ConversationView({ room }: ConversationViewProps) {
     setStatus(room.id, room.status);
     setTurnInfo(room.id, room.current_turn_index, room.max_turns);
     return () => { clearRoom(room.id); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- store actions are stable, room props only needed on mount
   }, [room.id]);
 
   // WebSocket for live updates
-  useWebSocket(room.id, {
+  const { connected } = useWebSocket(room.id, {
     onMessage: (msg) => addMessage(room.id, msg),
     onStatus: (s, turn, max) => {
       setStatus(room.id, s);
@@ -50,6 +51,7 @@ export default function ConversationView({ room }: ConversationViewProps) {
     if (historyData?.messages) {
       setMessages(room.id, historyData.messages);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- store action is stable
   }, [historyData, room.id]);
 
   const handleStart = useCallback(async () => {
@@ -111,6 +113,12 @@ export default function ConversationView({ room }: ConversationViewProps) {
 
   return (
     <div className="flex flex-col h-full bg-nebula-900/50 rounded-xl border border-nebula-600/20 overflow-hidden">
+      {!connected && (
+        <div className="bg-yellow-500/20 border-b border-yellow-500/50 px-3 py-2 text-yellow-200 text-sm flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-yellow-400 animate-pulse" />
+          Reconnecting to server...
+        </div>
+      )}
       {error && (
         <div className="bg-red-500/20 border-b border-red-500/50 p-3 text-red-200 text-sm flex justify-between items-center">
           <span>{error}</span>

@@ -1,13 +1,14 @@
 """Unit tests for Pydantic schemas - validation, serialization, defaults."""
 
+from datetime import UTC, datetime
+
 import pytest
-from datetime import datetime, timezone
 from pydantic import ValidationError
 
-from schemas.agent import AgentCreate, AgentUpdate, AgentResponse
-from schemas.room import RoomCreate, RoomUpdate, RoomResponse, RoomAgentAdd, RoomAgentReorder
+from schemas.agent import AgentCreate, AgentResponse, AgentUpdate
 from schemas.message import MessageResponse
-from schemas.simulation import SimulationStatus, InjectMessage
+from schemas.room import RoomAgentAdd, RoomAgentReorder, RoomCreate, RoomResponse, RoomUpdate
+from schemas.simulation import InjectMessage, SimulationStatus
 
 
 class TestAgentSchemas:
@@ -43,7 +44,7 @@ class TestAgentSchemas:
         assert len(dump) == 3
 
     def test_agent_response_from_attributes(self):
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         resp = AgentResponse(
             id="abc-123",
             name="Bot",
@@ -81,7 +82,7 @@ class TestRoomSchemas:
         assert dump == {}
 
     def test_room_response_with_agents(self):
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         resp = RoomResponse(
             id="room-1",
             name="Test",
@@ -114,7 +115,7 @@ class TestRoomSchemas:
 
 class TestMessageSchemas:
     def test_message_response(self):
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         resp = MessageResponse(
             id="msg-1",
             room_id="room-1",
@@ -129,7 +130,7 @@ class TestMessageSchemas:
         assert resp.agent_name == "Bot"
 
     def test_message_response_null_agent(self):
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         resp = MessageResponse(
             id="msg-2",
             room_id="room-1",

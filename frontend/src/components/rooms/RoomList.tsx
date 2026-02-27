@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, MessageSquare } from "lucide-react";
 import { roomsApi } from "../../api/rooms";
+import { useToastStore } from "../../stores/toastStore";
 import RoomCard from "./RoomCard";
 import RoomForm from "./RoomForm";
 import EmptyState from "../shared/EmptyState";
@@ -10,6 +11,7 @@ import type { Room, RoomCreate } from "../../types";
 
 export default function RoomList() {
   const queryClient = useQueryClient();
+  const addToast = useToastStore((s) => s.addToast);
   const [showForm, setShowForm] = useState(false);
   const [editRoom, setEditRoom] = useState<Room | null>(null);
   const [deleteRoom, setDeleteRoom] = useState<Room | null>(null);
@@ -24,7 +26,9 @@ export default function RoomList() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["rooms"] });
       setShowForm(false);
+      addToast("success", "Room created");
     },
+    onError: () => addToast("error", "Failed to create room"),
   });
 
   const updateMutation = useMutation({
@@ -33,12 +37,18 @@ export default function RoomList() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["rooms"] });
       setEditRoom(null);
+      addToast("success", "Room updated");
     },
+    onError: () => addToast("error", "Failed to update room"),
   });
 
   const deleteMutation = useMutation({
     mutationFn: roomsApi.delete,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["rooms"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
+      addToast("success", "Room deleted");
+    },
+    onError: () => addToast("error", "Failed to delete room"),
   });
 
   if (isLoading) {
@@ -98,6 +108,7 @@ export default function RoomList() {
         <RoomForm
           onSubmit={(data) => createMutation.mutate(data)}
           onCancel={() => setShowForm(false)}
+          isPending={createMutation.isPending}
         />
       )}
 
@@ -108,6 +119,7 @@ export default function RoomList() {
             updateMutation.mutate({ id: editRoom.id, data })
           }
           onCancel={() => setEditRoom(null)}
+          isPending={updateMutation.isPending}
         />
       )}
 

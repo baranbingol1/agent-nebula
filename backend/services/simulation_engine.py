@@ -1,18 +1,17 @@
 import asyncio
+import contextlib
 import json
 import logging
-from datetime import datetime, timezone
-
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 
 from agents import Agent, Runner
 from agents.extensions.models.litellm_model import LitellmModel
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from database import async_session
+from models.message import Message
 from models.room import Room
 from models.room_agent import RoomAgent
-from models.message import Message
 
 logger = logging.getLogger(__name__)
 
@@ -307,10 +306,8 @@ class SimulationManager:
         runner.pause_event.set()  # Unblock if paused
         if runner.task and not runner.task.done():
             runner.task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await runner.task
-            except asyncio.CancelledError:
-                pass
         del self.simulations[room_id]
         return True
 

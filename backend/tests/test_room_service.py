@@ -1,11 +1,10 @@
 """Unit tests for RoomService CRUD and agent assignment operations."""
 
-import pytest
 
-from services.room_service import RoomService
-from services.agent_service import AgentService
-from schemas.room import RoomCreate, RoomUpdate
 from schemas.agent import AgentCreate
+from schemas.room import RoomCreate, RoomUpdate
+from services.agent_service import AgentService
+from services.room_service import RoomService
 
 
 async def _create_agent(db_session, name="Bot"):

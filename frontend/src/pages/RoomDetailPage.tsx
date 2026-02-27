@@ -2,6 +2,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Play, Settings } from "lucide-react";
 import { roomsApi } from "../api/rooms";
+import { useToastStore } from "../stores/toastStore";
 import AgentAssignment from "../components/rooms/AgentAssignment";
 import StatusBadge from "../components/shared/StatusBadge";
 import { useState } from "react";
@@ -12,6 +13,7 @@ export default function RoomDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const addToast = useToastStore((s) => s.addToast);
   const [showEdit, setShowEdit] = useState(false);
 
   const { data: room, isLoading } = useQuery({
@@ -26,7 +28,9 @@ export default function RoomDetailPage() {
       queryClient.invalidateQueries({ queryKey: ["rooms", id] });
       queryClient.invalidateQueries({ queryKey: ["rooms"] });
       setShowEdit(false);
+      addToast("success", "Room updated");
     },
+    onError: () => addToast("error", "Failed to update room"),
   });
 
   if (isLoading) {
@@ -98,6 +102,7 @@ export default function RoomDetailPage() {
           room={room}
           onSubmit={(data) => updateMutation.mutate(data)}
           onCancel={() => setShowEdit(false)}
+          isPending={updateMutation.isPending}
         />
       )}
     </div>

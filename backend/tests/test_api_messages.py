@@ -1,6 +1,5 @@
 """Integration tests for the messages API endpoint."""
 
-import pytest
 
 from services.message_service import MessageService
 
