@@ -29,10 +29,3 @@ async def init_db():
     async with engine.begin() as conn:
         from models import agent, room, room_agent, message  # noqa: F401
         await conn.run_sync(Base.metadata.create_all)
-
-        # Migration: drop avatar_id column if it exists (no longer used)
-        from sqlalchemy import text
-        result = await conn.execute(text("PRAGMA table_info(agents)"))
-        columns = [row[1] for row in result.fetchall()]
-        if "avatar_id" in columns:
-            await conn.execute(text("ALTER TABLE agents DROP COLUMN avatar_id"))

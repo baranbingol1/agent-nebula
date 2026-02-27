@@ -3,36 +3,41 @@ import { useQuery } from "@tanstack/react-query";
 import { messagesApi } from "../../api/messages";
 import { simulationApi } from "../../api/simulation";
 import { useWebSocket } from "../../hooks/useWebSocket";
+import { useSimulationStore } from "../../stores/simulationStore";
 import MessageList from "./MessageList";
 import ControlBar from "./ControlBar";
 import InjectMessageInput from "./InjectMessageInput";
 import TypingIndicator from "./TypingIndicator";
-import type { Room, Message } from "../../types";
+import type { Room } from "../../types";
 
 interface ConversationViewProps {
   room: Room;
 }
 
 export default function ConversationView({ room }: ConversationViewProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [status, setStatus] = useState<string>(room.status);
-  const [typing, setTyping] = useState<{ agent_id: string; agent_name: string } | null>(null);
-  const [currentTurn, setCurrentTurn] = useState(room.current_turn_index);
-  const [maxTurns, setMaxTurns] = useState(room.max_turns);
+  const messages = useSimulationStore((s) => s.messages[room.id] || []);
+  const status = useSimulationStore((s) => s.roomStatus[room.id] || room.status);
+  const typing = useSimulationStore((s) => s.typingAgent[room.id] || null);
+  const currentTurn = useSimulationStore((s) => s.currentTurn[room.id] ?? room.current_turn_index);
+  const maxTurns = useSimulationStore((s) => s.maxTurns[room.id] ?? room.max_turns);
+  const { addMessage, setMessages, setStatus, setTyping, setTurnInfo, clearRoom } = useSimulationStore.getState();
   const [error, setError] = useState<string | null>(null);
+
+  // Initialize store from room props
+  useEffect(() => {
+    setStatus(room.id, room.status);
+    setTurnInfo(room.id, room.current_turn_index, room.max_turns);
+    return () => { clearRoom(room.id); };
+  }, [room.id]);
 
   // WebSocket for live updates
   useWebSocket(room.id, {
-    onMessage: (msg) => {
-      setMessages((prev) => [...prev, msg]);
-      setTyping(null);
-    },
+    onMessage: (msg) => addMessage(room.id, msg),
     onStatus: (s, turn, max) => {
-      setStatus(s);
-      if (turn !== undefined) setCurrentTurn(turn);
-      if (max !== undefined) setMaxTurns(max);
+      setStatus(room.id, s);
+      if (turn !== undefined && max !== undefined) setTurnInfo(room.id, turn, max);
     },
-    onTyping: (agent) => setTyping(agent),
+    onTyping: (agent) => setTyping(room.id, agent),
   });
 
   // Load existing messages
@@ -43,17 +48,18 @@ export default function ConversationView({ room }: ConversationViewProps) {
 
   useEffect(() => {
     if (historyData?.messages) {
-      setMessages(historyData.messages);
+      setMessages(room.id, historyData.messages);
     }
-  }, [historyData]);
+  }, [historyData, room.id]);
 
   const handleStart = useCallback(async () => {
     try {
       setError(null);
       await simulationApi.start(room.id);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Failed to start simulation";
       console.error("Failed to start:", e);
-      setError(e.message || "Failed to start simulation");
+      setError(msg);
     }
   }, [room.id]);
 
@@ -61,9 +67,10 @@ export default function ConversationView({ room }: ConversationViewProps) {
     try {
       setError(null);
       await simulationApi.pause(room.id);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Failed to pause simulation";
       console.error("Failed to pause:", e);
-      setError(e.message || "Failed to pause simulation");
+      setError(msg);
     }
   }, [room.id]);
 
@@ -71,9 +78,10 @@ export default function ConversationView({ room }: ConversationViewProps) {
     try {
       setError(null);
       await simulationApi.resume(room.id);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Failed to resume simulation";
       console.error("Failed to resume:", e);
-      setError(e.message || "Failed to resume simulation");
+      setError(msg);
     }
   }, [room.id]);
 
@@ -81,9 +89,10 @@ export default function ConversationView({ room }: ConversationViewProps) {
     try {
       setError(null);
       await simulationApi.stop(room.id);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Failed to stop simulation";
       console.error("Failed to stop:", e);
-      setError(e.message || "Failed to stop simulation");
+      setError(msg);
     }
   }, [room.id]);
 
@@ -91,9 +100,10 @@ export default function ConversationView({ room }: ConversationViewProps) {
     try {
       setError(null);
       await simulationApi.inject(room.id, content);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Failed to inject message";
       console.error("Failed to inject:", e);
-      setError(e.message || "Failed to inject message");
+      setError(msg);
     }
   }, [room.id]);
 

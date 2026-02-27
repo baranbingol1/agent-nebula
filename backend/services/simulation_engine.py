@@ -129,8 +129,8 @@ class SimulationRunner:
                     try:
                         response_text = await self._call_llm(agent_model, history)
                     except Exception as e:
-                        logger.error(f"LLM call failed for agent {agent_model.name}: {e}")
-                        response_text = f"[Error: {str(e)[:200]}]"
+                        logger.error(f"LLM call failed for agent {agent_model.name}: {e}", exc_info=True)
+                        response_text = f"[Error: LLM call failed for {agent_model.name}. Check server logs for details.]"
 
                     # Save message
                     msg = Message(
@@ -196,7 +196,7 @@ class SimulationRunner:
                     room.status = "idle"
                     await db.commit()
             await ws_manager.broadcast(self.room_id, {
-                "type": "error", "error": str(e),
+                "type": "error", "error": "Simulation encountered an unexpected error. Check server logs.",
             })
 
     async def _load_room(self, db) -> Room | None:
