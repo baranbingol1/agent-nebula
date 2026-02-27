@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, X, GripVertical } from "lucide-react";
 import { agentsApi } from "../../api/agents";
@@ -12,6 +13,9 @@ interface AgentAssignmentProps {
 
 export default function AgentAssignment({ room }: AgentAssignmentProps) {
   const queryClient = useQueryClient();
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
+  const dragNode = useRef<HTMLDivElement | null>(null);
 
   const { data: allAgents = [] } = useQuery({
     queryKey: ["agents"],
@@ -34,8 +38,46 @@ export default function AgentAssignment({ room }: AgentAssignmentProps) {
     },
   });
 
+  const reorderMutation = useMutation({
+    mutationFn: (agentIds: string[]) => roomsApi.reorderAgents(room.id, agentIds),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rooms", room.id] });
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
+    },
+  });
+
   const assignedIds = new Set(room.agents.map((ra) => ra.agent_id));
   const unassigned = allAgents.filter((a) => !assignedIds.has(a.id));
+
+  const handleDragStart = (index: number, e: React.DragEvent<HTMLDivElement>) => {
+    setDragIndex(index);
+    dragNode.current = e.currentTarget;
+    e.dataTransfer.effectAllowed = "move";
+    // Slight delay so the dragged element doesn't disappear instantly
+    requestAnimationFrame(() => {
+      if (dragNode.current) dragNode.current.style.opacity = "0.4";
+    });
+  };
+
+  const handleDragOver = (index: number, e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (dragIndex === null || dragIndex === index) return;
+    setOverIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    if (dragNode.current) dragNode.current.style.opacity = "1";
+    if (dragIndex !== null && overIndex !== null && dragIndex !== overIndex) {
+      const reordered = [...room.agents];
+      const [moved] = reordered.splice(dragIndex, 1);
+      reordered.splice(overIndex, 0, moved);
+      reorderMutation.mutate(reordered.map((ra) => ra.agent_id));
+    }
+    setDragIndex(null);
+    setOverIndex(null);
+    dragNode.current = null;
+  };
 
   return (
     <div className="space-y-4">
@@ -52,9 +94,17 @@ export default function AgentAssignment({ room }: AgentAssignmentProps) {
           {room.agents.map((ra, i) => (
             <div
               key={ra.agent_id}
-              className="flex items-center gap-3 rounded-lg bg-nebula-700/30 border border-nebula-500/20 px-3 py-2.5"
+              draggable
+              onDragStart={(e) => handleDragStart(i, e)}
+              onDragOver={(e) => handleDragOver(i, e)}
+              onDragEnd={handleDragEnd}
+              className={`flex items-center gap-3 rounded-lg bg-nebula-700/30 border px-3 py-2.5 transition-colors ${
+                overIndex === i && dragIndex !== null && dragIndex !== i
+                  ? "border-cosmic-purple/60 bg-cosmic-purple/10"
+                  : "border-nebula-500/20"
+              }`}
             >
-              <GripVertical className="h-4 w-4 text-nebula-500 cursor-grab" />
+              <GripVertical className="h-4 w-4 text-nebula-500 cursor-grab active:cursor-grabbing" />
               <span className="text-xs font-mono text-nebula-400 w-4">
                 {i + 1}
               </span>

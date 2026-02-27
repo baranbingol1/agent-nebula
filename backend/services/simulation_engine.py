@@ -260,6 +260,14 @@ class SimulationManager:
             if runner.task and not runner.task.done():
                 return False
 
+        # Reset turn counter so the simulation loop can run again
+        async with async_session() as db:
+            room = await db.get(Room, room_id)
+            if not room:
+                return False
+            room.current_turn_index = 0
+            await db.commit()
+
         runner = SimulationRunner(room_id)
         self.simulations[room_id] = runner
         runner.task = asyncio.create_task(runner.run())

@@ -5,12 +5,14 @@ import { roomsApi } from "../../api/rooms";
 import RoomCard from "./RoomCard";
 import RoomForm from "./RoomForm";
 import EmptyState from "../shared/EmptyState";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import type { Room, RoomCreate } from "../../types";
 
 export default function RoomList() {
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [editRoom, setEditRoom] = useState<Room | null>(null);
+  const [deleteRoom, setDeleteRoom] = useState<Room | null>(null);
 
   const { data: rooms = [], isLoading } = useQuery({
     queryKey: ["rooms"],
@@ -86,11 +88,7 @@ export default function RoomList() {
               key={room.id}
               room={room}
               onEdit={() => setEditRoom(room)}
-              onDelete={() => {
-                if (confirm(`Delete room "${room.name}"?`)) {
-                  deleteMutation.mutate(room.id);
-                }
-              }}
+              onDelete={() => setDeleteRoom(room)}
             />
           ))}
         </div>
@@ -110,6 +108,18 @@ export default function RoomList() {
             updateMutation.mutate({ id: editRoom.id, data })
           }
           onCancel={() => setEditRoom(null)}
+        />
+      )}
+
+      {deleteRoom && (
+        <ConfirmDialog
+          title="Delete Room"
+          message={`Are you sure you want to delete "${deleteRoom.name}"? All messages in this room will be lost.`}
+          onConfirm={() => {
+            deleteMutation.mutate(deleteRoom.id);
+            setDeleteRoom(null);
+          }}
+          onCancel={() => setDeleteRoom(null)}
         />
       )}
     </div>

@@ -5,12 +5,14 @@ import { agentsApi } from "../../api/agents";
 import AgentCard from "./AgentCard";
 import AgentForm from "./AgentForm";
 import EmptyState from "../shared/EmptyState";
+import ConfirmDialog from "../shared/ConfirmDialog";
 import type { Agent, AgentCreate } from "../../types";
 
 export default function AgentList() {
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [editAgent, setEditAgent] = useState<Agent | null>(null);
+  const [deleteAgent, setDeleteAgent] = useState<Agent | null>(null);
 
   const { data: agents = [], isLoading } = useQuery({
     queryKey: ["agents"],
@@ -86,11 +88,7 @@ export default function AgentList() {
               key={agent.id}
               agent={agent}
               onEdit={() => setEditAgent(agent)}
-              onDelete={() => {
-                if (confirm(`Delete agent "${agent.name}"?`)) {
-                  deleteMutation.mutate(agent.id);
-                }
-              }}
+              onDelete={() => setDeleteAgent(agent)}
             />
           ))}
         </div>
@@ -110,6 +108,18 @@ export default function AgentList() {
             updateMutation.mutate({ id: editAgent.id, data })
           }
           onCancel={() => setEditAgent(null)}
+        />
+      )}
+
+      {deleteAgent && (
+        <ConfirmDialog
+          title="Delete Agent"
+          message={`Are you sure you want to delete "${deleteAgent.name}"? This cannot be undone.`}
+          onConfirm={() => {
+            deleteMutation.mutate(deleteAgent.id);
+            setDeleteAgent(null);
+          }}
+          onCancel={() => setDeleteAgent(null)}
         />
       )}
     </div>
